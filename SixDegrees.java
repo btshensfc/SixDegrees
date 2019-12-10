@@ -7,34 +7,34 @@ import java.io.*;
 import java.util.*;
 
 class BFS {
-	String startingPoint;
+	String start;
 	String goal;
 	boolean found = false;
 
 	// finds the shortest path.
-	void shortestPath(HashMap<String, LinkedList<String>> map, String startingPoint, String goal){
-		this.startingPoint = startingPoint;
+	void shortestPath(HashMap<String, LinkedList<String>> map, String start, String goal){
+		this.start = start;
 		this.goal = goal;
 
 		//queue stores list of actors to check
 		LinkedList<String> queue = new LinkedList<String>();
-		queue.add(startingPoint);
+		queue.add(start);
 
 		// hashset keeps track of what actors are visted
 		HashSet<String> visited = new HashSet<String>();
-		visited.add(startingPoint);
+		visited.add(start);
 
 		// path keeps track of paths that have been tested
 		Hashtable<String, String> path = new Hashtable<String, String>();
-		path.put(startingPoint, "");
+		path.put(start, "");
 
 		// this is the path that fitst the best definition
 		Stack<String> finalPath = new Stack<String>();
 		String tempString = goal;
 
 		// this ends search if there is adirect connection
-		if (map.get(startingPoint).contains(goal)){
-			System.out.println("Path between " + startingPoint + " and " + goal + ": " + startingPoint + " --> " + goal);
+		if (map.get(start).contains(goal)){
+			System.out.println("Path between " + start + " and " + goal + ": " + start + " --> " + goal);
 		} else {
 			while(!queue.isEmpty()){
 				//searches first item in queue
@@ -56,7 +56,7 @@ class BFS {
 			}
 
 			// pushed specified path to final path
-			while (!tempString.equals(startingPoint)){
+			while (!tempString.equals(start)){
 				finalPath.push(tempString);
 				String link = path.get(tempString);
 				tempString = link;
@@ -65,7 +65,7 @@ class BFS {
 			finalPath.push(tempString);
 
 			// format output
-			System.out.print("Path between " + startingPoint + " and " + goal + ": ");
+			System.out.print("Path between " + start + " and " + goal + ": ");
 
 			// prints out all items inside the final path stack. Arrow only prints if there is a connection.
 			while (!finalPath.isEmpty()){
@@ -81,7 +81,7 @@ class BFS {
 	}
 }
 
-public class SixDegrees {
+public class SixDegrees{
 	public static void main(String[] args){
 		File inputFile = null;
 
@@ -96,38 +96,38 @@ public class SixDegrees {
 		//inifiate buffered reader to read user input
 		BufferedReader br = null;
 		try {
-			String currentLine;
+			String line;
 			br = new BufferedReader(new FileReader(inputFile));
 			JSONParser parser = new JSONParser();
 
 			// read in each line from the file
-			while ((currentLine = br.readLine()) != null){
+			while ((line = br.readLine()) != null){
 				//stores actors temporarily
 				ArrayList<String> tempArray = new ArrayList<String>();
 
-				if (currentLine.indexOf("[") != -1) {
+				if (line.indexOf("[") != -1) {
 
 					/* edge cases to take care of extra brackets */
-					if (currentLine.contains("[Cameo]")){
-						currentLine = currentLine.replace("[Cameo]", "(Cameo)");
+					if (line.contains("[Cameo]")){
+						line = line.replace("[Cameo]", "(Cameo)");
 					}
 
-					if (currentLine.contains("[cameo]")){
-						currentLine = currentLine.replace("[cameo]", "(cameo)");
+					if (line.contains("[cameo]")){
+						line = line.replace("[cameo]", "(cameo)");
 					}
 
-					if (currentLine.contains("[REC]")){
-						currentLine = currentLine.replace("[REC]", "(REC)");
+					if (line.contains("[REC]")){
+						line = line.replace("[REC]", "(REC)");
 					}
 
-					if (currentLine.contains("[Singing voice]")){
-						currentLine = currentLine.replace("[Singing voice]", "(Singing voice)");
+					if (line.contains("[Singing voice]")){
+						line = line.replace("[Singing voice]", "(Singing voice)");
 					}
 
 					//to parse inputs and objectify them
-					currentLine = currentLine.substring(currentLine.indexOf("["), currentLine.indexOf("]") + 1);
-					currentLine = currentLine.replace("\"\"", "\"");
-					Object jsonCast = (Object) parser.parse(currentLine);
+					line = line.substring(line.indexOf("["), line.indexOf("]") + 1);
+					line = line.replace("\"\"", "\"");
+					Object jsonCast = (Object) parser.parse(line);
 
 					// get names and add them in temp arraylist
 					JSONArray jsonCastArray = (JSONArray) jsonCast;
